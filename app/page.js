@@ -44,7 +44,7 @@ export default function Home() {
               className="opacity-70"
             />
           </div>
-          {message.length !== 0 ? (
+          {message.length == 0 ? (
             <>
             <div className="flex items-center gap-2 ">
               <Image src={assets.logo_icon} alt=""  className="h-16"/>
@@ -53,7 +53,7 @@ export default function Home() {
             <p className="text-sm mt-1">How can I help you today?</p>
             </>
           ):
-        (<div> <Message role="ai" content={'what is next js'}/> </div>
+        (<div> <Message role="user" content={'what is next js'}/> </div>
 
         )
       }

@@ -14,15 +14,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <ClerkProvider>
-      <AppContextProvider>
-        <html lang="en">
-          <body className={`${inter.className} antialiased`}>
-            {children}
-          </body>
-        </html>
-      </AppContextProvider>
-    </ClerkProvider>
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const content = (
+    <AppContextProvider>
+      <html lang="en">
+        <body className={`${inter.className} antialiased`}>{children}</body>
+      </html>
+    </AppContextProvider>
   );
+
+  if (!publishableKey) {
+    return content;
+  }
+
+  return <ClerkProvider publishableKey={publishableKey}>{content}</ClerkProvider>;
 }

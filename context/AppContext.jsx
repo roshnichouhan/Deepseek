@@ -10,11 +10,15 @@ export const useAppContext = () => {
 };
 
 export const AppContextProvider = ({ children }) => {
-  const { user } = useUser();
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  let user = null;
+  if (publishableKey) {
+    try {
+      // useUser will throw if no ClerkProvider, so guard with try
+      ({ user } = useUser());
+    } catch {}
+  }
 
-  const value = {
-    user,
-  };
-
+  const value = { user };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

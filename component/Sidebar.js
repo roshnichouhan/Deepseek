@@ -1,16 +1,16 @@
+"use client";
 import React from 'react'
 import Image from 'next/image'
 import { assets } from '@/assets/assets';
-import {useClerk,UserButton} from '@clerk/nextjs';
+import { SignInButton, UserButton } from '@clerk/nextjs';
 import { useAppContext } from '@/context/AppContext';
 import ChatLabel from './ChatLabel';
 import { useState } from 'react';
 
 export const Sidebar = ({ expand, setExpand }) => {
-
-  const{openSignIn} = useClerk();
-  const {user} = useAppContext();
+  const { user } = useAppContext();
   const[openMenu,setOpenMenu] = useState({id : 0,open : false});
+  const clerkEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 
   return (
@@ -123,12 +123,20 @@ export const Sidebar = ({ expand, setExpand }) => {
         )}
 
         {/* Profile Section */}
-        <div onClick={ user ? null :openSignIn} className={`flex items-center ${expand ? 'hover:bg-white/10 rounded-lg' : 'justify-center w-full'} gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer`}>
-        {
-        }
-          user ? <UserButton  /> : 
-          <Image src={assets.profile_icon} alt="" className="w-7 " />
-
+        <div
+          className={`flex items-center ${expand ? 'hover:bg-white/10 rounded-lg' : 'justify-center w-full'} gap-3 text-white/60 text-sm p-2 mt-2`}
+        >
+          {clerkEnabled ? (
+            user ? (
+              <UserButton />
+            ) : (
+              <SignInButton mode="modal">
+                <Image src={assets.profile_icon} alt="" width={28} height={28} className="w-7 cursor-pointer" />
+              </SignInButton>
+            )
+          ) : (
+            <Image src={assets.profile_icon} alt="" width={28} height={28} className="w-7" />
+          )}
           {expand && <span>My Profile</span>}
         </div>
 
